@@ -1,37 +1,79 @@
-Отчет по практической работе №1
+Отчет по практической работе №2
 ----
-В рамках данной работы были изучены принципы проектирования приложения с разделением его на 3 уровня: domain, data и presentation, также было реализовано проектирование собственного приложения за счет построения диаграмм.
+В рамках данной работы были изучены модели данных на разных слоях программного обеспечения, также основной проект был переработан под модульную структуру для достижения принципов "чистой архитектуры".
 
 Задание №1
 --
-Были созданы диаграммы для проектирования приложения MoodyCat, позволяющего отслеживать настроение котов и их любимую погоду.
+В директории data был создан пакет Storage и в нем интерфейс MovieStorage с get и save. Далее была создана реализация данного интерфейса SharedPrefMovieStorage:
 
-**Use-case диаграмма приложения MoodyCat:**
-<img width="837" height="518" alt="Screenshot 2025-10-03 210429" src="https://github.com/user-attachments/assets/4bcd4f7a-786a-4277-94e2-681917b2274b" />
+```
+public class SharedPrefMovieStorage implements MovieStorage {
+    private static final String SHARED_PREFS_NAME = "movie_prefs";
+    private static final String KEY_MOVIE_NAME = "movie_name";
+    private static final String KEY_MOVIE_ID = "movie_id";
+    private static final String KEY_MOVIE_DATE = "movie_date";
+
+    private final SharedPreferences sharedPreferences;
+
+    public SharedPrefMovieStorage(Context context) {
+        this.sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+    }
+
+    @Override
+    public Movie get() {
+        String movieName = sharedPreferences.getString(KEY_MOVIE_NAME, "unknown");
+        int movieId = sharedPreferences.getInt(KEY_MOVIE_ID, -1);
+        String movieDate = sharedPreferences.getString(KEY_MOVIE_DATE, "");
+        return new Movie(movieId, movieName, movieDate);
+    }
+
+    @Override
+    public boolean save(Movie movie) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_MOVIE_NAME, movie.getName());
+        editor.putInt(KEY_MOVIE_ID, movie.getId());
+        editor.putString(KEY_MOVIE_DATE, movie.getLocalDate());
+        return editor.commit();
+    }
+}
+```
+Также в data была создана модель Movie:
+
+```
+public class Movie {
+    private int id;
+    private String name;
+    private String localDate;
+
+    public Movie(int id, String name, String localDate) {
+        this.id = id;
+        this.name = name;
+        this.localDate = localDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLocalDate() {
+        return localDate;
+    }
+}
+```
+Далее в проекте были созданы новые модули app, domain, data, настроены зависимости:
+<img width="654" height="1112" alt="image" src="https://github.com/user-attachments/assets/91795574-c258-4954-9398-3224b9d6ee12" />
+
+**Приложение:**
+<img width="1919" height="1113" alt="image" src="https://github.com/user-attachments/assets/21e422cc-dcb9-4453-9c30-50fc54f63908" />
+
 
 Задание №2
 --
-**Диаграмма с разделением приложения на слои:**
-<img width="1257" height="967" alt="image" src="https://github.com/user-attachments/assets/3b61b64b-d829-4e4d-a42d-10e0cc0b9450" />
-
-Задание №3
---
-Для выполнения задания был создан новый модуль «MovieProject», внутри которого были добавлены директории: domain, data и presentation. Были прописаны сценарии для сохранения любимого фильма и его отображения, также реализовано сохранение данных о фильме через SharedPreferences.
-
-**Структура модуля:**
-<img width="608" height="808" alt="image" src="https://github.com/user-attachments/assets/87030762-eaf2-426b-b9f4-eeff2b49068e" />
-
 **Приложение:**
-<img width="974" height="560" alt="image" src="https://github.com/user-attachments/assets/29b73fbb-bcea-439a-8c6b-821c4f861003" />
-<img width="974" height="598" alt="image" src="https://github.com/user-attachments/assets/f7a6487b-e483-4af0-b64a-81064ff9b0c8" />
 
-Задание №4
---
-Был создан новый проект MoodyCat, внутри которого созданы 3 необходимые директории, прописана логика, добавлены интерфейсы. Для проверки работы функций приложения был создан класс TestDataSource с тестовым набором данных, а в файле MainActivity реализована логика отображения результатов через Logcat.
 
-**Структура проекта:**
 
-<img width="700" height="1038" alt="image" src="https://github.com/user-attachments/assets/09ae2853-f5bd-48e4-9d46-16b2c057a5fd" />
-
-**Logcat:**
-<img width="1919" height="1158" alt="image" src="https://github.com/user-attachments/assets/2a03ef28-c63d-484f-9935-2b919c777170" />
