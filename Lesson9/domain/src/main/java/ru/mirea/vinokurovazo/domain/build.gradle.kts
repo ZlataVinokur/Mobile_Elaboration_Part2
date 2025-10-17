@@ -1,3 +1,5 @@
+package ru.mirea.vinokurovazo.domain
+
 plugins {
     alias(libs.plugins.android.application)
 }
