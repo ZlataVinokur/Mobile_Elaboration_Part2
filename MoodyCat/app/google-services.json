@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "567310665077",
+    "project_id": "moodycat-14762",
+    "storage_bucket": "moodycat-14762.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567310665077:android:2a7f19e49a4985c3f67f3c",
+        "android_client_info": {
+          "package_name": "ru.mirea.vinokurovazo.moodycat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhJG9GDGqOH_OmIbthonW686sQJZaiLJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

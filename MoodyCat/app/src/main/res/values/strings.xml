@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MoodyCat</string>
+    <string name="welcome_message">Добро пожаловать в MoodyCat!</string>
 </resources>

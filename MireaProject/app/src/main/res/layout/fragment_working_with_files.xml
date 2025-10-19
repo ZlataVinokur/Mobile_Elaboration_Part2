@@ -1,0 +1,33 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="16dp"
+        android:contentDescription="Добавить"
+        app:backgroundTint="#3F51B5"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="717dp"
+        android:layout_marginTop="16dp"
+        android:paddingVertical="50px">
+
+        <TextView
+            android:id="@+id/textViewFileList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Ваши файлы"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="16sp" />
+    </ScrollView>
+
+</FrameLayout>

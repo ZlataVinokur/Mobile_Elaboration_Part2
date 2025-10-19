@@ -1,0 +1,54 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.Material3.HeadlineLarge"
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Несколько причин, по которым секонд-хенд может считаться крутым:"
+            android:textSize="24sp"
+            android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.Material3.BodyLarge"
+            android:id="@+id/content_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Экологичность. Покупка вещи в секонд-хенде помогает продлить жизнь одежде и не поддерживает «быструю моду» — частое обновление коллекций.
+Качество вещей. В секонд-хенде обычно больше качественных вещей, чем в массмаркете. Многие вещи попадают в продажу после минимального использования, а иногда можно найти абсолютно новые товары с бирками.
+Уникальность ассортимента. В секонд-хенде можно встретить не только нейтральные вещи, но и винтажные, дорогие бренды, необычные фасоны и цвета. Собранный из такой одежды гардероб выглядит уникально.
+Эффект неожиданной покупки. В огромном количестве одежды можно найти истинную изюминку. И пусть вещь не вписывается в гардероб, зато поднимает настроение, а стиль можно и поменять.
+"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurface"
+            android:lineSpacingMultiplier="1.2" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:cardCornerRadius="12dp"
+            app:strokeWidth="1dp"
+            android:layout_marginTop="16dp">
+
+            <ImageView
+                android:id="@+id/industry_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/photo" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

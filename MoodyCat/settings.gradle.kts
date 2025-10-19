@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "MoodyCat"
 include(":app")
+include(":data")
+include(":domain")
