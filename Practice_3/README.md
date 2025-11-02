@@ -91,8 +91,99 @@ public class MainViewModel extends ViewModel {
 
 Контрольное задание
 --
+В этой части задания была внедрена архитектура MVVM в приложенин. В слое presentation создана MainViewModel, которая наследуется от Android ViewModel и управляет данными для MainActivity. Для наблюдения за изменениями состояния реализовано использование LiveData, включая MediatorLiveData для комбинирования информации из разных источников.
+
+```
+    public MainViewModel(GetHistoryUseCase getHistoryUseCase,
+                         TrackMoodUseCase trackMoodUseCase,
+                         AnalyzeWeatherUseCase analyzeWeatherUseCase) {
+        this.getHistoryUseCase = getHistoryUseCase;
+        this.trackMoodUseCase = trackMoodUseCase;
+        this.analyzeWeatherUseCase = analyzeWeatherUseCase;
+
+        setupMediatorLiveData();
+        loadData();
+    }
+
+    private void setupMediatorLiveData() {
+        combinedData.addSource(catsLiveData, cats -> combineData());
+        combinedData.addSource(moodsLiveData, moods -> combineData());
+        combinedData.addSource(weatherLiveData, weather -> combineData());
+    }
+
+    private void combineData() {
+        List<Cat> cats = catsLiveData.getValue();
+        List<Mood> moods = moodsLiveData.getValue();
+        String weather = weatherLiveData.getValue();
+
+        CombinedData data = new CombinedData(cats, moods, weather);
+        combinedData.setValue(data);
+    }
+```
+
+ViewModel использует Use Cases для получения данных из domain слоя, а Activity наблюдает за изменениями через LiveData observers. 
+
+```
+private void setupObservers() {
+
+        mainViewModel.isLoading().observe(this, isLoading -> {
+            progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        });
+
+        mainViewModel.getCombinedData().observe(this, combinedData -> {
+            if (combinedData != null) {
+                if (combinedData.weather != null) {
+                    TextView weatherTemp = findViewById(R.id.tv_weather_temp);
+                    weatherTemp.setText("Температура: " + combinedData.weather);
+                }
+
+                if (!authRepository.isGuest() && combinedData.moods != null && !combinedData.moods.isEmpty()) {
+                    TextView catMood = findViewById(R.id.tv_cat_mood);
+                    catMood.setText("Текущее настроение: " + combinedData.moods.get(0).getMood());
+                }
+            }
+        });
 
 
+        mainViewModel.getError().observe(this, error -> {
+            if (error != null && !error.isEmpty()) {
+                Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+```
 
+Для создания ViewModel с зависимостями реализована MainViewModelFactory.
 
+```
+public class HistoryViewModelFactory implements ViewModelProvider.Factory {
+    private final Context context;
 
+    public HistoryViewModelFactory(Context context) {
+        this.context = context;
+    }
+
+    @NonNull
+    @Override
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        if (modelClass.isAssignableFrom(HistoryViewModel.class)) {
+            CatRepositoryImpl catRepository = new CatRepositoryImpl(context);
+            GetHistoryUseCase getHistoryUseCase = new GetHistoryUseCase(catRepository);
+
+            @SuppressWarnings("unchecked")
+            T result = (T) new HistoryViewModel(getHistoryUseCase);
+            return result;
+        }
+        throw new IllegalArgumentException("Unknown ViewModel class");
+    }
+}
+```
+Интерфейс MainActivity был обновлен для отображения комбинированных данных через MediatorLiveData, показывая информацию о котах, их настроениях и погодных условиях вместе.
+
+**Приложение:**
+<img width="1906" height="1195" alt="image" src="https://github.com/user-attachments/assets/4e0a1a3b-a41c-435f-9aec-49a82778d37a" />
+
+Для возможности просмотра истории был реализован HistoryActivity также по логике MVVM с использованием RecyclerView для отображения списка.
+
+**Приложение:**
+<img width="1919" height="1198" alt="image" src="https://github.com/user-attachments/assets/6d991d82-0471-4984-b7d1-f5d28ac5ed9e" />
