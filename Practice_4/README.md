@@ -1,149 +1,97 @@
-Отчет по практической работе №3
+Отчет по практической работе №4
 ----
-В рамках данной работы были изучены архитектурные шаблоны, также был сделан переход от прямого взаимодействия Activity с use cases к использованию паттерна MVVM с LiveData.
+В рамках данной работы была поставлена задача освоить три основных способа отображения списков в Android-приложениях.
 
 Задание №1
 --
-Был создан класс MainViewModel, унаследованный от Android ViewModel, для выноса бизнес-логики из Activity и управления состоянием интерфейса.
+Для ScrollViewApp реализован вертикальный скроллинг с отображением геометрической прогрессии, где каждый элемент динамически добавлялся через LayoutInflater.
 
-```
-public class MainViewModel extends ViewModel {
-    private MovieRepository movieRepository;
-    private MutableLiveData<String> favoriteMovie = new MutableLiveData<>();
-    private static final String TAG = "MY_APP_VIEWMODEL";
-
-    public MainViewModel(MovieRepository movieRepository) {
-        Log.i(TAG, "=== MainViewModel CONSTRUCTOR called ===");
-        this.movieRepository = movieRepository;
-    }
-
-    @Override
-    protected void onCleared() {
-        Log.i(TAG, "=== MainViewModel onCleared called ===");
-        super.onCleared();
-    }
-
-    public MutableLiveData<String> getFavoriteMovie() {
-        return favoriteMovie;
-    }
-
-    public void saveMovie(Movie movie) {
-        Log.i(TAG, "saveMovie called with: " + movie.getName());
-        Boolean result = new SaveMovieToFavoriteUseCase(movieRepository).execute(movie);
-        favoriteMovie.setValue("Save result: " + result);
-    }
-
-    public void getMovie() {
-        Log.i(TAG, "getMovie called");
-        Movie movie = new GetFavoriteFilmUseCase(movieRepository).execute();
-        favoriteMovie.setValue("My favorite movie is: " + movie.getName());
-    }
-}
-```
-Также была реализована ViewModelFactory, инкапсулирующая создание зависимостей MovieRepository и обеспечивающая правильную передачу данных в ViewModel.
-
-```
-public class ViewModelFactory implements ViewModelProvider.Factory {
-    private Context context;
-
-    public ViewModelFactory(Context context) {
-        this.context = context;
-    }
-
-    @NonNull
-    @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        MovieRepository movieRepository = new MovieRepositoryImpl(context);
-        return (T) new MainViewModel(movieRepository);
-    }
-}
-```
-В MainActivity была удалена прямая работа с use cases, добавлена подписка на LiveData и перенаправление пользовательских действий во ViewModel.
-
-```
-public class MainViewModel extends ViewModel {
-    private MovieRepository movieRepository;
-    private MutableLiveData<String> favoriteMovie = new MutableLiveData<>();
-    private static final String TAG = "MY_APP_VIEWMODEL";
-
-    public MainViewModel(MovieRepository movieRepository) {
-        Log.i(TAG, "=== MainViewModel CONSTRUCTOR called ===");
-        this.movieRepository = movieRepository;
-    }
-
-    @Override
-    protected void onCleared() {
-        Log.i(TAG, "=== MainViewModel onCleared called ===");
-        super.onCleared();
-    }
-
-    public MutableLiveData<String> getFavoriteMovie() {
-        return favoriteMovie;
-    }
-```
 **Приложение:**
 
-<img width="1919" height="1199" alt="image" src="https://github.com/user-attachments/assets/ded82f04-82d8-4aaa-8d5c-225baf2086cc" />
+<img width="1851" height="1030" alt="image" src="https://github.com/user-attachments/assets/def61bb3-a816-4a3d-b583-49cd8d12248a" />
 
-**Logcat при повороте экрана:**
+Задание №2
+--
+В ListViewApp создан кастомный адаптер для отображения списка литературных произведений с авторами, что продемонстрировало работу с ArrayAdapter и переопределение метода getView.
 
-<img width="1919" height="1199" alt="image" src="https://github.com/user-attachments/assets/124e7cfb-03f6-49bb-aaaf-8c34d92090aa" />
+**Приложение:**
+<img width="1865" height="986" alt="image" src="https://github.com/user-attachments/assets/98cb7758-a0f7-4084-917f-89306c7b482b" />
+
+Задание №3
+--
+Далее в RecyclerViewApp реализован ViewHolder и адаптер, отображающий исторические события с изображениями и описаниями.
+
+**Приложение:**
+<img width="1844" height="983" alt="image" src="https://github.com/user-attachments/assets/b33cb99f-f865-47c5-ad74-9e31cfee876c" />
+
+В каждом из заданий в проект был приложен скрин экрана в res/drawable.
 
 Контрольное задание
 --
-В этой части задания была внедрена архитектура MVVM в приложенин. В слое presentation создана MainViewModel, которая наследуется от Android ViewModel и управляет данными для MainActivity. Для наблюдения за изменениями состояния реализовано использование LiveData, включая MediatorLiveData для комбинирования информации из разных источников.
+В этой части задания был создан новый макет карточки с изображением с CardView. В RecyclerView MoodAdapter теперь отображает изображения настроений и текстовые данные в карточках.
 
+**Приложение:**
+<img width="1841" height="1082" alt="image" src="https://github.com/user-attachments/assets/3ea138dc-3ba6-44dc-9777-7c2e5663eb2c" />
+
+Добавлена система автоматического определения изображений по типу настроения кота. 
 ```
-    public MainViewModel(GetHistoryUseCase getHistoryUseCase,
-                         TrackMoodUseCase trackMoodUseCase,
-                         AnalyzeWeatherUseCase analyzeWeatherUseCase) {
-        this.getHistoryUseCase = getHistoryUseCase;
-        this.trackMoodUseCase = trackMoodUseCase;
-        this.analyzeWeatherUseCase = analyzeWeatherUseCase;
-
-        setupMediatorLiveData();
-        loadData();
+private String getMoodImage(String mood) {
+        switch (mood.toLowerCase()) {
+            case "счастливый":
+            case "веселый":
+                return "cat_happy";
+            case "грустный":
+            case "печальный":
+                return "cat_sad";
+            case "сонный":
+            case "уставший":
+                return "cat_sleepy";
+            case "игривый":
+            case "активный":
+                return "cat_playful";
+            case "голодный":
+                return "cat_hungry";
+            default:
+                return "cat_default";
+        }
     }
-
-    private void setupMediatorLiveData() {
-        combinedData.addSource(catsLiveData, cats -> combineData());
-        combinedData.addSource(moodsLiveData, moods -> combineData());
-        combinedData.addSource(weatherLiveData, weather -> combineData());
-    }
-
-    private void combineData() {
-        List<Cat> cats = catsLiveData.getValue();
-        List<Mood> moods = moodsLiveData.getValue();
-        String weather = weatherLiveData.getValue();
-
-        CombinedData data = new CombinedData(cats, moods, weather);
-        combinedData.setValue(data);
+```
+Добавлены примеры настроений с различными изображениями для демонстрации функциональности.
+```
+private List<Mood> createMockMoods() {
+        List<Mood> moods = new ArrayList<>();
+        long currentTime = System.currentTimeMillis();
+        moods.add(new Mood(1, 1, "Барсик", "Счастливый", "Солнечно", currentTime));
+        moods.add(new Mood(2, 1, "Барсик", "Игривый", "Ясно", currentTime - 86400000));
+        moods.add(new Mood(3, 1, "Барсик", "Сонный", "Облачно", currentTime - 172800000));
+        moods.add(new Mood(4, 1, "Барсик", "Грустный", "Дождь", currentTime - 259200000));
+        return moods;
     }
 ```
 
-ViewModel использует Use Cases для получения данных из domain слоя, а Activity наблюдает за изменениями через LiveData observers. 
+Настроена работа с LiveData, реализовано наблюдение за изменениями данных и обновление интерфейса в реальном времени.
 
 ```
 private void setupObservers() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        mainViewModel.getMoodsLiveData().observe(this, moods -> {
+            if (moods != null && !moods.isEmpty() && !authRepository.isGuest()) {
+                TextView catMood = findViewById(R.id.tv_cat_mood);
+                catMood.setText("Текущее настроение: " + moods.get(0).getMood());
+            }
+        });
+
+        mainViewModel.getWeatherLiveData().observe(this, weather -> {
+            if (weather != null) {
+                TextView weatherTemp = findViewById(R.id.tv_weather_temp);
+                weatherTemp.setText("Температура: " + weather);
+            }
+        });
 
         mainViewModel.isLoading().observe(this, isLoading -> {
             progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
-
-        mainViewModel.getCombinedData().observe(this, combinedData -> {
-            if (combinedData != null) {
-                if (combinedData.weather != null) {
-                    TextView weatherTemp = findViewById(R.id.tv_weather_temp);
-                    weatherTemp.setText("Температура: " + combinedData.weather);
-                }
-
-                if (!authRepository.isGuest() && combinedData.moods != null && !combinedData.moods.isEmpty()) {
-                    TextView catMood = findViewById(R.id.tv_cat_mood);
-                    catMood.setText("Текущее настроение: " + combinedData.moods.get(0).getMood());
-                }
-            }
-        });
-
 
         mainViewModel.getError().observe(this, error -> {
             if (error != null && !error.isEmpty()) {
@@ -152,38 +100,3 @@ private void setupObservers() {
         });
     }
 ```
-
-Для создания ViewModel с зависимостями реализована MainViewModelFactory.
-
-```
-public class HistoryViewModelFactory implements ViewModelProvider.Factory {
-    private final Context context;
-
-    public HistoryViewModelFactory(Context context) {
-        this.context = context;
-    }
-
-    @NonNull
-    @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(HistoryViewModel.class)) {
-            CatRepositoryImpl catRepository = new CatRepositoryImpl(context);
-            GetHistoryUseCase getHistoryUseCase = new GetHistoryUseCase(catRepository);
-
-            @SuppressWarnings("unchecked")
-            T result = (T) new HistoryViewModel(getHistoryUseCase);
-            return result;
-        }
-        throw new IllegalArgumentException("Unknown ViewModel class");
-    }
-}
-```
-Интерфейс MainActivity был обновлен для отображения комбинированных данных через MediatorLiveData, показывая информацию о котах, их настроениях и погодных условиях вместе.
-
-**Приложение:**
-<img width="1906" height="1195" alt="image" src="https://github.com/user-attachments/assets/4e0a1a3b-a41c-435f-9aec-49a82778d37a" />
-
-Для возможности просмотра истории был реализован HistoryActivity также по логике MVVM с использованием RecyclerView для отображения списка.
-
-**Приложение:**
-<img width="1919" height="1198" alt="image" src="https://github.com/user-attachments/assets/6d991d82-0471-4984-b7d1-f5d28ac5ed9e" />
