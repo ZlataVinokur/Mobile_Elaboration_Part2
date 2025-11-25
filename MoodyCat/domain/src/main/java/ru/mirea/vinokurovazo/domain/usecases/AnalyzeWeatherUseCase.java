@@ -3,7 +3,7 @@ package ru.mirea.vinokurovazo.domain.usecases;
 import ru.mirea.vinokurovazo.domain.repository.WeatherRepository;
 
 public class AnalyzeWeatherUseCase {
-    private final WeatherRepository weatherRepository;
+    private WeatherRepository weatherRepository;
 
     public AnalyzeWeatherUseCase(WeatherRepository weatherRepository) {
         this.weatherRepository = weatherRepository;

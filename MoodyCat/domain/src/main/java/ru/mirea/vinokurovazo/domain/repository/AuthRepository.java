@@ -6,8 +6,8 @@ public interface AuthRepository {
     void guestLogin(AuthCallback callback);
     void logout();
     boolean isLoggedIn();
+    boolean isGuest();
 
-    // Объявляем интерфейс callback внутри AuthRepository
     interface AuthCallback {
         void onSuccess();
         void onError(String message);

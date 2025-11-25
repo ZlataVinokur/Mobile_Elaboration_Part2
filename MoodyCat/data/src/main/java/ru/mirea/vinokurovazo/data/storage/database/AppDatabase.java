@@ -16,10 +16,12 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
-                            context.getApplicationContext(),
-                            AppDatabase.class,
-                            "moodycat_database"
-                    ).build();
+                                    context.getApplicationContext(),
+                                    AppDatabase.class,
+                                    "moodycat_database"
+                            ).fallbackToDestructiveMigration() // Добавляем для избежания миграционных ошибок
+                            .allowMainThreadQueries() // Разрешаем запросы в главном потоке для отладки
+                            .build();
                 }
             }
         }

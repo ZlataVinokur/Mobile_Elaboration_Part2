@@ -10,5 +10,6 @@ public interface CatRepository {
     Cat getCatById(int id);
     void addCat(Cat cat);
     void addMood(int catId, String mood, String weather);
-    List<Mood> getMoodHistory(int catId); // Используем доменную модель Mood
+    List<Mood> getMoodHistory(int catId);
+    List<Mood> getAllMoods();
 }

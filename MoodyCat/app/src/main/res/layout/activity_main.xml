@@ -1,53 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center">
+    android:background="#F5F5F5">
 
-    <TextView
-        android:id="@+id/tv_welcome"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Добро пожаловать!"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="32dp" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_add_mood"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#FF9D00"
-        android:text="Добавить настроение" />
+        <!-- Заголовок -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="67dp" />
 
-    <Button
-        android:id="@+id/btn_view_cats"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#FF9D00"
-        android:text="Посмотреть котов" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Личный кабинет кота"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:textColor="#333" />
 
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="#ABABAB"
-        android:text="Выйти"
-        android:textColor="#FFFFFF" />
+        <!-- Карточка кота -->
+        <LinearLayout
+            android:id="@+id/cat_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
 
-    <TextView
-        android:id="@+id/tv_debug"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:gravity="center"
-        android:text="Отладочная информация..."
-        android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_cat_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ФИО кота"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#333" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/tv_cat_mood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Текущее настроение: "
+                android:textSize="16sp"
+                android:textColor="#666"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+
+        <!-- Кнопки действий -->
+        <Button
+            android:id="@+id/btn_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#F0A61C"
+            android:text="Посмотреть историю настроений"
+            android:textColor="#FFF" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Погода"
+                android:textColor="#333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_weather_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Город: Москва"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_weather_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Температура: 20°C"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_weather_wind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ветер: 5 м/с"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <Button
+            android:id="@+id/btn_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16px"
+            android:backgroundTint="#F0A61C"
+            android:text="Обновить погоду"
+            android:textColor="#FFF" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#4ECDC4"
+            android:text="Выйти"
+            android:textColor="#FFF" />
+
+        <!-- Погода -->
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

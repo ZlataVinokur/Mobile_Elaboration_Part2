@@ -64,6 +64,11 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
+    public boolean isGuest() {
+        return sharedPrefsStorage.isGuest();
+    }
+
+    @Override
     public void guestLogin(AuthCallback callback) {
         sharedPrefsStorage.saveUserSession("guest_" + System.currentTimeMillis(), "Гость", true);
         callback.onSuccess();

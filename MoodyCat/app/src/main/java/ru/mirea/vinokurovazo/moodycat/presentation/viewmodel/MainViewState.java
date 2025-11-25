@@ -21,7 +21,6 @@ public class MainViewState {
         this.error = error;
     }
 
-    // Getters
     public List<Cat> getCats() { return cats; }
     public List<Mood> getMoods() { return moods; }
     public String getWeather() { return weather; }

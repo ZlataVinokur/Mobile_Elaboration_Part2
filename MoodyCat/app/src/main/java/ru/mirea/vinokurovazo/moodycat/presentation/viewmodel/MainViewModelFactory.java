@@ -24,9 +24,8 @@ public class MainViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
-            // Создаем зависимости БЕЗ Room для быстрого запуска
             CatRepositoryImpl catRepository = new CatRepositoryImpl(context);
-            WeatherRepositoryImpl weatherRepository = new WeatherRepositoryImpl();
+            WeatherRepositoryImpl weatherRepository = new WeatherRepositoryImpl(context);
 
             GetHistoryUseCase getHistoryUseCase = new GetHistoryUseCase(catRepository);
             TrackMoodUseCase trackMoodUseCase = new TrackMoodUseCase(catRepository);
@@ -36,7 +35,8 @@ public class MainViewModelFactory implements ViewModelProvider.Factory {
             T result = (T) new MainViewModel(
                     getHistoryUseCase,
                     trackMoodUseCase,
-                    analyzeWeatherUseCase
+                    analyzeWeatherUseCase,
+                    weatherRepository
             );
             return result;
         }

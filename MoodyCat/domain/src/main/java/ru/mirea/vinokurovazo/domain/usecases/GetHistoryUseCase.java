@@ -15,4 +15,9 @@ public class GetHistoryUseCase {
     public List<Cat> execute() {
         return catRepository.getCats();
     }
+
+    public CatRepository getRepository() {
+        return catRepository;
+    }
+
 }
