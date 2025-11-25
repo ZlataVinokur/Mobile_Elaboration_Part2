@@ -68,30 +68,81 @@ Picasso.get()
 
 Контрольное задание
 --
-В этой части задания был создан новый макет карточки с изображением с CardView. В RecyclerView MoodAdapter теперь отображает изображения настроений и текстовые данные в карточках.
+Было реализовано получение данных о погоде из внешнего API с использованием Retrofit, настроен сетевой слой с обработкой ошибок и асинхронными запросами к OpenWeatherMap.
+
+```
+public void getWeatherFromApi(WeatherCallback callback) {
+        Call<WeatherResponse> call = weatherApiService.getWeather(
+                "Moscow",
+                "metric",
+                ApiConfig.WEATHER_API_KEY
+        );
+
+        call.enqueue(new Callback<WeatherResponse>() {
+            @Override
+            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    WeatherResponse weatherResponse = response.body();
+                    double temp = weatherResponse.getMain().getTemp();
+                    String description = weatherResponse.getWeather()[0].getDescription();
+                    String city = weatherResponse.getCityName();
+
+                    callback.onSuccess(temp + "°C, " + description);
+                } else {
+                    callback.onError("Ошибка сервера: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WeatherResponse> call, Throwable t) {
+                callback.onError("Ошибка сети: " + t.getMessage());
+            }
+        });
+    }
+```
+**Приложение:**
+
+<img width="536" height="954" alt="image" src="https://github.com/user-attachments/assets/f981b80d-6259-4cae-87b3-11b1ec9ce1f0" />
+
+
+Интегрирована библиотека Glide для загрузки и отображения изображений настроений котов в RecyclerView.
+```
+String imageName = mood.getImageName();
+int resId = holder.itemView.getContext().getResources()
+        .getIdentifier(imageName, "drawable", holder.itemView.getContext().getPackageName());
+
+if (resId != 0) {
+    Glide.with(holder.itemView.getContext())
+            .load(resId)
+            .placeholder(R.drawable.cat_default)
+            .error(R.drawable.cat_default)
+            .into(holder.moodImage);
+}
+```
+
+Добавлен функционал создания новых записей о настроениях котов, также реализован диалог с выбором кота и настроения через Spinner.
+```
+private void showAddMoodDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Добавить настроение кота");
+
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.setPadding(50, 50, 50, 50);
+
+        android.widget.Spinner spinner = new android.widget.Spinner(this);
+        String[] cats = {"Барсик", "Мурка"};
+        android.widget.ArrayAdapter<String> spinnerAdapter = new android.widget.ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cats);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
+        android.widget.Spinner moodSpinner = new android.widget.Spinner(this);
+        String[] moods = {"Счастливый", "Грустный", "Сонный", "Игривый", "Голодный"};
+        android.widget.ArrayAdapter<String> moodAdapter = new android.widget.ArrayAdapter<>(this, android.R.layout.simple_spinner_item, moods);
+        moodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        moodSpinner.setAdapter(moodAdapter);
+```
 
 **Приложение:**
 
-Добавлена система автоматического определения изображений по типу настроения кота. 
-```
-private String getMoodImage(String mood) {
-        switch (mood.toLowerCase()) {
-            case "счастливый":
-            case "веселый":
-                return "cat_happy";
-            case "грустный":
-            case "печальный":
-                return "cat_sad";
-            case "сонный":
-            case "уставший":
-                return "cat_sleepy";
-            case "игривый":
-            case "активный":
-                return "cat_playful";
-            case "голодный":
-                return "cat_hungry";
-            default:
-                return "cat_default";
-        }
-    }
-```
+<img width="540" height="964" alt="image" src="https://github.com/user-attachments/assets/009bc815-4346-4217-82d7-d77d94aa4047" />
