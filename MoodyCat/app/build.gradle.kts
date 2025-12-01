@@ -34,6 +34,10 @@ android {
 }
 
 dependencies {
+    implementation("androidx.fragment:fragment:1.8.0")
+    implementation("androidx.navigation:navigation-fragment:2.7.5")
+    implementation("androidx.navigation:navigation-ui:2.7.5")
+
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 

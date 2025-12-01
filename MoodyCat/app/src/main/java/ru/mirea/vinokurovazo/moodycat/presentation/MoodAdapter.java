@@ -21,11 +21,23 @@ import java.util.Locale;
 public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder> {
     private List<Mood> moods = new ArrayList<>();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+    private OnMoodClickListener moodClickListener;
+    private OnMoodLongClickListener moodLongClickListener;
 
-    public MoodAdapter(List<Mood> moods) {
+    public interface OnMoodClickListener {
+        void onMoodClick(Mood mood, int position);
+    }
+
+    public interface OnMoodLongClickListener {
+        void onMoodLongClick(Mood mood, int position);
+    }
+
+    public MoodAdapter(List<Mood> moods, OnMoodClickListener listener, OnMoodLongClickListener longClickListener) {
         if (moods != null) {
             this.moods = moods;
         }
+        this.moodClickListener = listener;
+        this.moodLongClickListener = longClickListener;
     }
 
     public void updateMoods(List<Mood> moods) {
@@ -71,11 +83,17 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         holder.dateText.setText(dateFormat.format(mood.getDate()));
 
         holder.itemView.setOnClickListener(v -> {
-            android.widget.Toast.makeText(
-                    holder.itemView.getContext(),
-                    mood.getCatName() + ": " + mood.getMood(),
-                    android.widget.Toast.LENGTH_SHORT
-            ).show();
+            if (moodClickListener != null) {
+                moodClickListener.onMoodClick(mood, position);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (moodLongClickListener != null) {
+                moodLongClickListener.onMoodLongClick(mood, position);
+                return true;
+            }
+            return false;
         });
     }
 

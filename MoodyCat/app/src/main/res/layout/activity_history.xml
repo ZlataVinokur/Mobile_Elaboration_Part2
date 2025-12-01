@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#E4D1BE">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -21,8 +21,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:fontFamily="cursive"
             android:gravity="center"
             android:text="История настроений"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#464756 "
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -37,8 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#4ECDC4"
-            android:text="Назад" />
+            android:backgroundTint="#EDAA63 "
+            android:text="Назад"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -47,8 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
+        android:background="#F2E9DF"
         android:contentDescription="Добавить настроение"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="#F2E9DF"
         app:layout_anchor="@id/recycler_view"
         app:layout_anchorGravity="bottom|right|end" />
 

@@ -29,129 +29,19 @@ import ru.mirea.vinokurovazo.moodycat.presentation.viewmodel.MainViewModel;
 import ru.mirea.vinokurovazo.moodycat.presentation.viewmodel.MainViewState;
 import ru.mirea.vinokurovazo.moodycat.presentation.viewmodel.MainViewModelFactory;
 
-
 public class MainActivity extends AppCompatActivity {
-    private MainViewModel mainViewModel;
-    private AuthRepository authRepository;
-
-    private ProgressBar progressBar;
-    private Button logoutButton, viewCatsButton, addMoodButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        authRepository = new AuthRepositoryImpl(this);
+        AuthRepositoryImpl authRepository = new AuthRepositoryImpl(this);
 
         if (!authRepository.isLoggedIn()) {
             startActivity(new Intent(this, AuthActivity.class));
             finish();
-            return;
         }
-
-        setupViewModel();
-        setupUI();
-        setupObservers();
     }
-
-    private void setupViewModel() {
-        MainViewModelFactory factory = new MainViewModelFactory(this);
-        mainViewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
-    }
-
-    private void setupUI() {
-        progressBar = findViewById(R.id.progress_bar);
-
-        TextView catNameText = findViewById(R.id.tv_cat_name);
-        TextView catMoodText = findViewById(R.id.tv_cat_mood);
-        Button historyButton = findViewById(R.id.btn_history);
-        Button weatherButton = findViewById(R.id.btn_weather);
-        Button logoutButton = findViewById(R.id.btn_logout);
-
-
-        boolean isGuest = authRepository.isGuest();
-
-        if (isGuest) {
-            catNameText.setText("Гость");
-            catMoodText.setVisibility(View.GONE);
-            historyButton.setVisibility(View.GONE);
-        } else {
-            catNameText.setText("Барсик");
-            catMoodText.setText("Текущее настроение: Счастливый");
-            historyButton.setVisibility(View.VISIBLE);
-            catMoodText.setVisibility(View.VISIBLE);
-        }
-
-        historyButton.setOnClickListener(v -> {
-            if (!isGuest) {
-                startActivity(new Intent(this, HistoryActivity.class));
-            }
-        });
-
-        weatherButton.setOnClickListener(v -> {
-            updateWeather();
-        });
-
-        logoutButton.setOnClickListener(v -> logout());
-    }
-
-    private void updateWeather() {
-        WeatherRepositoryImpl weatherRepo = mainViewModel.getWeatherRepository();
-
-        weatherRepo.getWeatherFromApi(new WeatherRepositoryImpl.WeatherCallback() {
-            @Override
-            public void onSuccess(String weatherInfo) {
-                runOnUiThread(() -> {
-                    TextView weatherTemp = findViewById(R.id.tv_weather_temp);
-                    weatherTemp.setText("Москва: " + weatherInfo);
-                    Toast.makeText(MainActivity.this, "Погода обновлена!", Toast.LENGTH_SHORT).show();
-                });
-            }
-
-            @Override
-            public void onError(String error) {
-                runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, error, Toast.LENGTH_LONG).show();
-                });
-            }
-        });
-    }
-
-    private void logout() {
-        authRepository.logout();
-        Toast.makeText(this, "Вы вышли из системы", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, AuthActivity.class));
-        finish();
-    }
-
-    private void setupObservers() {
-        progressBar.setVisibility(View.VISIBLE);
-
-        mainViewModel.getMoodsLiveData().observe(this, moods -> {
-            if (moods != null && !moods.isEmpty() && !authRepository.isGuest()) {
-                TextView catMood = findViewById(R.id.tv_cat_mood);
-                catMood.setText("Текущее настроение: " + moods.get(0).getMood());
-            }
-        });
-
-        mainViewModel.getWeatherLiveData().observe(this, weather -> {
-            if (weather != null) {
-                TextView weatherTemp = findViewById(R.id.tv_weather_temp);
-                weatherTemp.setText("Температура: " + weather);
-            }
-        });
-
-        mainViewModel.isLoading().observe(this, isLoading -> {
-            progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        });
-
-        mainViewModel.getError().observe(this, error -> {
-            if (error != null && !error.isEmpty()) {
-                Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
 }
 //skunkfuck@eee.com,12345aaa

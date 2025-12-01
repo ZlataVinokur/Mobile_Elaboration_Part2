@@ -28,7 +28,6 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
-        // Инициализация репозитория и use cases
         authRepository = new AuthRepositoryImpl(this);
         loginUseCase = new LoginUseCase(authRepository);
         registerUseCase = new RegisterUseCase(authRepository);

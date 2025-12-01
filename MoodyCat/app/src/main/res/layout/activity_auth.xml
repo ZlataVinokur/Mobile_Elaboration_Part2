@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#FF9D00"
+    android:background="#E4D1BE"
+    android:backgroundTint="#E4D1BE"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="16dp">
@@ -27,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#F0A61C"
+        android:backgroundTint="#EDAA63"
         android:text="Войти" />
 
     <Button
@@ -35,15 +36,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#F0A61C"
-        android:text="Зарегистрироваться" />
+        android:backgroundTint="#F2E9DF"
+        android:text="Зарегистрироваться"
+        android:textColor="#EDAA63" />
 
     <Button
         android:id="@+id/btn_guest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#4ECDC4"
+        android:backgroundTint="#EDAA63"
         android:text="Войти как гость" />
 
 </LinearLayout>

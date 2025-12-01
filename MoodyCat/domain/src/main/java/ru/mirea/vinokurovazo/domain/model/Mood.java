@@ -1,8 +1,9 @@
 package ru.mirea.vinokurovazo.domain.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Mood {
+public class Mood implements Serializable {
     private int id;
     private int catId;
     private String catName;
@@ -35,16 +36,12 @@ public class Mood {
         return imageName;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
     public int getId() { return id; }
-    public int getCatId() { return catId; }
+
     public String getCatName() { return catName; }
     public String getMood() { return mood; }
     public String getWeather() { return weather; }
-    public long getTimestamp() { return timestamp; }
+
     public Date getDate() { return new Date(timestamp); }
 
     private String getMoodImage(String mood) {

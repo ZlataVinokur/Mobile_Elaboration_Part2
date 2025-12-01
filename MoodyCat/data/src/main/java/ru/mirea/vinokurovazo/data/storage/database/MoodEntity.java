@@ -28,7 +28,6 @@ public class MoodEntity {
     @ColumnInfo(name = "image_name")
     public String imageName;
 
-    // Основной конструктор для Room
     public MoodEntity(int id, int catId, String catName, String mood, String weather, long timestamp, String imageName) {
         this.id = id;
         this.catId = catId;
@@ -37,42 +36,6 @@ public class MoodEntity {
         this.weather = weather;
         this.timestamp = timestamp;
         this.imageName = imageName;
-    }
-
-    // Дополнительный конструктор - помечаем как @Ignore
-    @Ignore
-    public MoodEntity(int catId, String catName, String mood, String weather, long timestamp) {
-        this(0, catId, catName, mood, weather, timestamp, getMoodImage(mood));
-    }
-
-    // Дополнительный конструктор - помечаем как @Ignore
-    @Ignore
-    public MoodEntity(int catId, String catName, String mood, String weather, long timestamp, String imageName) {
-        this(0, catId, catName, mood, weather, timestamp, imageName);
-    }
-
-    // Статический метод для определения изображения по настроению
-    private static String getMoodImage(String mood) {
-        if (mood == null) return "cat_default";
-
-        switch (mood.toLowerCase()) {
-            case "счастливый":
-            case "веселый":
-                return "cat_happy";
-            case "грустный":
-            case "печальный":
-                return "cat_sad";
-            case "сонный":
-            case "уставший":
-                return "cat_sleepy";
-            case "игривый":
-            case "активный":
-                return "cat_playful";
-            case "голодный":
-                return "cat_hungry";
-            default:
-                return "cat_default";
-        }
     }
 
     // Геттеры для Room

@@ -11,13 +11,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#EDDFD0 "
         android:padding="16dp">
 
         <ImageView
             android:id="@+id/iv_mood_image"
-            android:layout_width="75dp"
-            android:layout_height="74dp"
+            android:layout_width="115dp"
+            android:layout_height="104dp"
             android:contentDescription="Изображение настроения кота"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/cat_default" />
@@ -39,8 +41,9 @@
             android:id="@+id/tv_mood"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:text="   Настроение: Счастливый"
+            android:text="Настроение: Счастливый"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_mood_image"
@@ -50,10 +53,10 @@
             android:id="@+id/tv_weather"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:text="   Погода: Солнечно"
-            android:textColor="#666"
-            android:textSize="12sp"
+            android:text="Погода: Солнечно"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_mood_image"
             app:layout_constraintTop_toBottomOf="@+id/tv_mood" />
@@ -64,8 +67,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="01.01.2024 12:00"
-            android:textSize="10sp"
             android:textColor="#999"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_mood_image" />

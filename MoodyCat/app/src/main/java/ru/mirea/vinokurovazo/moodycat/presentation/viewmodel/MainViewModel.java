@@ -40,7 +40,6 @@ public class MainViewModel extends ViewModel {
     private void loadData() {
         isLoadingLiveData.setValue(true);
 
-        // Загружаем данные в фоновом потоке
         new Thread(() -> {
             try {
                 List<Mood> moods = ((CatRepositoryImpl) getHistoryUseCase.getRepository()).getAllMoods();

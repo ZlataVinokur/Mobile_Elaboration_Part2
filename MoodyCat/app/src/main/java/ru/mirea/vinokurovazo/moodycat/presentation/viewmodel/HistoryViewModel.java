@@ -12,11 +12,11 @@ import ru.mirea.vinokurovazo.data.repository.CatRepositoryImpl;
 
 public class HistoryViewModel extends ViewModel {
     private CatRepositoryImpl catRepository;
-    private MutableLiveData<List<Mood>> moodsLiveData = new MutableLiveData<>();
+    private LiveData<List<Mood>> moodsLiveData;
 
     public HistoryViewModel(CatRepositoryImpl catRepository) {
         this.catRepository = catRepository;
-        moodsLiveData.setValue(new ArrayList<>());
+        this.moodsLiveData = catRepository.getAllMoodsLiveData();
     }
 
     public LiveData<List<Mood>> getMoods() {
@@ -26,16 +26,14 @@ public class HistoryViewModel extends ViewModel {
     public void addMood(String catName, String mood, String weather) {
         int catId = catName.equals("Барсик") ? 1 : 2;
         catRepository.addMood(catId, mood, weather);
-        loadMoods();
     }
 
-    public void loadMoods() {
-        new Thread(() -> {
-            List<Mood> moods = catRepository.getAllMoods();
-            if (moods == null) {
-                moods = new ArrayList<>();
-            }
-            moodsLiveData.postValue(moods);
-        }).start();
+    public void updateMood(int moodId, String catName, String mood, String weather) {
+        catRepository.updateMood(moodId, catName, mood, weather);
     }
+
+    public void deleteMood(int moodId) {
+        catRepository.deleteMood(moodId);
+    }
+
 }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E4D1BE"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Заголовок -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="67dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="cursive"
+            android:gravity="center"
+            android:text="Личный кабинет кота"
+            android:textAllCaps="true"
+            android:textColor="#464756"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Кнопки действий -->
+        <ImageView
+            android:id="@+id/iv_cat_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="#EDDFD0"
+            android:contentDescription="Изображение кота"
+            android:fadingEdge="vertical"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/cat_default" />
+
+        <!-- Кнопка профиля -->
+        <Button
+            android:id="@+id/btn_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#EDAA63"
+            android:text="Профиль"
+            android:textColor="#FFF"
+            android:textStyle="bold" />
+
+        <!-- Погода -->
+        <Button
+            android:id="@+id/btn_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#F2E9DF"
+            android:text="Посмотреть историю настроений"
+            android:textColor="#EDAA63"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#EBA963"
+            android:text="Обновить погоду"
+            android:textColor="#FFF"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Погода"
+                android:textColor="#464756"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_weather_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Город: Москва"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_weather_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Температура: ..."
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#F2E9DF"
+            android:text="Выйти"
+            android:textColor="#EDAA63"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</ScrollView>

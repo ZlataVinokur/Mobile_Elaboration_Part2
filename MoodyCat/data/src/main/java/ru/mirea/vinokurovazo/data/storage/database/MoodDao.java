@@ -1,5 +1,6 @@
 package ru.mirea.vinokurovazo.data.storage.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -10,7 +11,10 @@ import java.util.List;
 @Dao
 public interface MoodDao {
     @Query("SELECT * FROM moods ORDER BY timestamp DESC")
-    List<MoodEntity> getAllMoods();
+    LiveData<List<MoodEntity>> getAllMoodsLiveData();
+
+    @Query("SELECT * FROM moods ORDER BY timestamp DESC")
+    List<MoodEntity> getAllMoods(); // для обратной совместимости
 
     @Query("SELECT * FROM moods WHERE cat_id = :catId ORDER BY timestamp DESC")
     List<MoodEntity> getMoodsByCatId(int catId);

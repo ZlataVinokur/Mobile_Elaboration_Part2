@@ -17,78 +17,61 @@ import java.util.concurrent.Executors;
 
 public class CatRepositoryImpl implements CatRepository {
     private AppDatabase appDatabase;
-    private List<Cat> mockCats;
     private ExecutorService executor;
 
     public CatRepositoryImpl(Context context) {
         this.appDatabase = AppDatabase.getInstance(context);
         this.executor = Executors.newSingleThreadExecutor();
-        initializeMockData();
+        initializeMockDataOnce();
     }
 
-    private void initializeMockData() {
-        mockCats = new ArrayList<>();
-        mockCats.add(new Cat(1, "Барсик", "Веселый кот", "cat1.jpg", "2024-01-15"));
-        mockCats.add(new Cat(2, "Мурка", "Сонный кот", "cat2.jpg", "2024-01-14"));
-
+    private void initializeMockDataOnce() {
         executor.execute(() -> {
             if (appDatabase.moodDao().getAllMoods().isEmpty()) {
-                // Используем основной конструктор с id=0 (autoGenerate=true сам установит id)
                 MoodEntity initialMood1 = new MoodEntity(0, 1, "Барсик", "Счастливый", "Солнечно",
                         System.currentTimeMillis(), "cat_happy");
                 MoodEntity initialMood2 = new MoodEntity(0, 2, "Мурка", "Сонный", "Облачно",
                         System.currentTimeMillis(), "cat_sleepy");
-                MoodEntity initialMood3 = new MoodEntity(0, 1, "Барсик", "Грустный", "Дождь",
-                        System.currentTimeMillis() - 86400000, "cat_sad");
-                MoodEntity initialMood4 = new MoodEntity(0, 2, "Мурка", "Игривый", "Ясно",
-                        System.currentTimeMillis() - 172800000, "cat_playful");
 
                 appDatabase.moodDao().insertMood(initialMood1);
                 appDatabase.moodDao().insertMood(initialMood2);
-                appDatabase.moodDao().insertMood(initialMood3);
-                appDatabase.moodDao().insertMood(initialMood4);
             }
         });
     }
 
+
     @Override
     public List<Cat> getCats() {
-        return mockCats;
+        return new ArrayList<>();
     }
 
     @Override
     public Cat getCatById(int id) {
-        for (Cat cat : mockCats) {
-            if (cat.getId() == id) {
-                return cat;
-            }
-        }
-        return null;
+        return null; // Не используется
     }
 
     @Override
     public void addCat(Cat cat) {
-        mockCats.add(cat);
+        // Не используется
     }
 
     @Override
     public void addMood(int catId, String mood, String weather) {
-        Cat cat = getCatById(catId);
-        if (cat != null) {
-            MoodEntity moodEntity = new MoodEntity(
-                    0, // id будет сгенерирован автоматически
-                    catId,
-                    cat.getName(),
-                    mood,
-                    weather,
-                    System.currentTimeMillis(),
-                    getMoodImage(mood)
-            );
+        String catName = (catId == 1) ? "Барсик" : "Мурка";
 
-            executor.execute(() -> {
-                appDatabase.moodDao().insertMood(moodEntity);
-            });
-        }
+        MoodEntity moodEntity = new MoodEntity(
+                0,
+                catId,
+                catName,
+                mood,
+                weather,
+                System.currentTimeMillis(),
+                getMoodImage(mood)
+        );
+
+        executor.execute(() -> {
+            appDatabase.moodDao().insertMood(moodEntity);
+        });
     }
 
     private String getMoodImage(String mood) {
@@ -114,8 +97,74 @@ public class CatRepositoryImpl implements CatRepository {
         }
     }
 
+    // Основной метод для получения LiveData настроений
+    public LiveData<List<Mood>> getAllMoodsLiveData() {
+        MutableLiveData<List<Mood>> result = new MutableLiveData<>();
+
+        // Преобразуем LiveData<MoodEntity> в LiveData<Mood>
+        LiveData<List<MoodEntity>> entitiesLiveData = appDatabase.moodDao().getAllMoodsLiveData();
+
+        // Наблюдаем за изменениями в Room и преобразуем их
+        entitiesLiveData.observeForever(moodEntities -> {
+            if (moodEntities != null) {
+                List<Mood> moods = new ArrayList<>();
+                for (MoodEntity entity : moodEntities) {
+                    moods.add(new Mood(
+                            entity.id,
+                            entity.catId,
+                            entity.catName,
+                            entity.mood,
+                            entity.weather,
+                            entity.timestamp,
+                            entity.imageName
+                    ));
+                }
+                result.postValue(moods);
+            }
+        });
+
+        return result;
+    }
+
+    public void updateMood(int moodId, String catName, String mood, String weather) {
+        executor.execute(() -> {
+            // Получаем все записи для поиска нужной
+            List<MoodEntity> allMoods = appDatabase.moodDao().getAllMoods();
+            MoodEntity existing = null;
+
+            for (MoodEntity entity : allMoods) {
+                if (entity.id == moodId) {
+                    existing = entity;
+                    break;
+                }
+            }
+
+            if (existing != null) {
+                int catId = catName.equals("Барсик") ? 1 : 2;
+
+                MoodEntity updated = new MoodEntity(
+                        moodId,
+                        catId,
+                        catName,
+                        mood,
+                        weather,
+                        existing.timestamp, // Сохраняем оригинальное время
+                        getMoodImage(mood)
+                );
+                appDatabase.moodDao().updateMood(updated);
+            }
+        });
+    }
+
+    public void deleteMood(int moodId) {
+        executor.execute(() -> {
+            appDatabase.moodDao().deleteMood(moodId);
+        });
+    }
+
     @Override
     public List<Mood> getMoodHistory(int catId) {
+        // Синхронный метод для обратной совместимости
         List<MoodEntity> moodEntities = appDatabase.moodDao().getMoodsByCatId(catId);
         List<Mood> moods = new ArrayList<>();
 
@@ -132,6 +181,7 @@ public class CatRepositoryImpl implements CatRepository {
         return moods;
     }
 
+    // Синхронный метод для обратной совместимости
     public List<Mood> getAllMoods() {
         List<MoodEntity> moodEntities = appDatabase.moodDao().getAllMoods();
         List<Mood> moods = new ArrayList<>();
@@ -148,28 +198,5 @@ public class CatRepositoryImpl implements CatRepository {
             ));
         }
         return moods;
-    }
-
-    public LiveData<List<Mood>> getAllMoodsLiveData() {
-        MutableLiveData<List<Mood>> liveData = new MutableLiveData<>();
-
-        executor.execute(() -> {
-            List<MoodEntity> moodEntities = appDatabase.moodDao().getAllMoods();
-            List<Mood> moods = new ArrayList<>();
-
-            for (MoodEntity entity : moodEntities) {
-                moods.add(new Mood(
-                        entity.id,
-                        entity.catId,
-                        entity.catName,
-                        entity.mood,
-                        entity.weather,
-                        entity.timestamp
-                ));
-            }
-            liveData.postValue(moods);
-        });
-
-        return liveData;
     }
 }
