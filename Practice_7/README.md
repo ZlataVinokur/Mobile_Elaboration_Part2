@@ -1,148 +1,148 @@
-Отчет по практической работе №6
+Отчет по практической работе №7
 ----
-В рамках данной работы была поставлена задача освоить работу с фрагментами в Android-приложениях, включая создание статических и динамических фрагментов, управление навигацией и передачу данных между компонентами.
+В рамках данной работы была поставлена задача освоить работу с разными типами навигации в Android Studio.
 
 Задание №1
 --
-Для первого модуля FragmentApp реализовано приложение с фрагментом, который отображает номер студента по списку. Создан класс BlankFragment, передача данных во фрагмент осуществлена через Bundle.
+Был создан новый модуль "BottomNavigationApp" с использованием шаблона Bottom Navigation Views Activity. В приложении реализована навигация между тремя основными разделами: Home, Info и Profile. Для навигации использован Navigation Component, который обеспечивает управление переходами между фрагментами через нижнюю панель навигации. Были добавлены новые иконки для каждого раздела. Цветовая гамма приложения обновлена в файле themes.xml и подключена в манифест файле.
 
 **Приложение:**
-<img width="1893" height="1072" alt="image" src="https://github.com/user-attachments/assets/69e5ed7c-4ff5-4da2-ba01-d713017c2133" />
+<img width="1919" height="1173" alt="image" src="https://github.com/user-attachments/assets/da53e43d-3ac9-495e-9782-9479e28d5e4f" />
 
 ```
-public class MainActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/title_home" />
 
-        if (savedInstanceState == null) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("my_number_student", 5);
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/baseline_assessment_24"
+        android:title="@string/title_info" />
 
-            BlankFragment fragment = new BlankFragment();
-            fragment.setArguments(bundle);
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/baseline_account_box_24"
+        android:title="@string/title_profile" />
 
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, fragment)
-                    .commit();
-        }
-    }
-}
+</menu>
+```
+
+Навигационный граф настроен в файле mobile_navigation.xml. Меню нижней навигации описано в файле bottom_nav_menu.xml.
+
+```
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="ru.mirea.vinokurovazo.bottomnavigationapp.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="ru.mirea.vinokurovazo.bottomnavigationapp.ui.dashboard.DashboardFragment"
+        android:label="@string/title_info"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="ru.mirea.vinokurovazo.bottomnavigationapp.ui.notifications.NotificationsFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>
 ```
 
 Задание №2
 --
-Далее в модуле FragmentManagerApp реализована навигация между фрагментами с использованием ViewModel для передачи данных. Создан ShareViewModel для хранения выбранного элемента, что позволяет фрагментам обмениваться данными без прямых ссылок друг на друга.
-
-```
-public class ShareViewModel extends ViewModel {
-    private final MutableLiveData<String> selectedItem = new MutableLiveData<>();
-
-    public void selectItem(String item) {
-        selectedItem.setValue(item);
-    }
-
-    public MutableLiveData<String> getSelectedItem() {
-        return selectedItem;
-    }
-}
-```
-
-BookListFragment при выборе книги обновляет значение во ViewModel и заменяет текущий фрагмент на BookDetailsFragment с помощью метода replace FragmentManager.
+Далее в модуле NavigationDrawerApp была реализована навигация с помощью боковой шторки. В приложении реализована навигация между тремя основными разделами: Главная, Информация и Профиль. Цветовая гамма приложения обновлена в файле themes.xml, где заданы новые цвета.
 
 **Приложение:**
-<img width="1846" height="1090" alt="image" src="https://github.com/user-attachments/assets/111550b9-5a88-4e57-a67a-89a4dd8b6a3d" />
-<img width="1880" height="1083" alt="image" src="https://github.com/user-attachments/assets/e6c10283-d131-4b70-9cda-a9936cc96d04" />
+<img width="1906" height="1129" alt="image" src="https://github.com/user-attachments/assets/b4c1ad16-4aaf-4b5d-a78b-10f980a4568a" />
+<img width="1862" height="1111" alt="image" src="https://github.com/user-attachments/assets/8c10706c-fa88-4fae-a7a0-cdcc17eea92c" />
 
-Задание №3
---
-В третьем модуле ResultApiFragmentApp был использован Fragment Result API для передачи данных между фрагментами. Реализован DataFragment с полем ввода текста и BottomSheetFragment, который получает введенные данные через fragment result.
-
-**Приложение:**
-<img width="1862" height="1075" alt="image" src="https://github.com/user-attachments/assets/719ee70a-5e78-4018-8317-0d7699353847" />
-
-Метод setFragmentResultListener позволяет BottomSheetFragment получать данные от DataFragment без прямых ссылок между компонентами.
+Была реализована функциональность закрытия боковой шторки системной кнопкой "назад". При нажатии кнопки, когда шторка открыта, она закрывается, а не происходит выход из приложения.
 
 ```
 @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bottom_sheet, container, false);
-
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            String text = bundle.getString("key");
-            TextView textView = view.findViewById(R.id.textViewResult);
-            textView.setText("Получено: " + text);
-        });
-
-        return view;
+public void onBackPressed() {
+    DrawerLayout drawer = binding.drawerLayout;
+    if (drawer.isDrawerOpen(GravityCompat.START)) {
+        drawer.closeDrawer(GravityCompat.START);
+    } else {
+        super.onBackPressed();
     }
+}
 ```
 
 Контрольное задание
 --
-В проекте была добавлена архитектура на фрагментах с навигацией через бэк-стек, основная Activity теперь служит контейнером, все экраны переведены в отдельные фрагменты.
-
-```
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        AuthRepositoryImpl authRepository = new AuthRepositoryImpl(this);
-
-        if (!authRepository.isLoggedIn()) {
-            startActivity(new Intent(this, AuthActivity.class));
-            finish();
-        }
-    }
-}
-```
-
-```
- @Override
-    public void onMoodClick(Mood mood, int position) {
-        MoodDetailFragment detailFragment = MoodDetailFragment.newInstance(mood);
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, detailFragment)
-                .addToBackStack("mood_detail")
-                .commit();
-    }
-```
-
-Добавлен фрагмент профиля пользователя - отображает данные авторизации из SharedPreferences, включая email и тип учетной записи, с возможностью возврата через системную кнопку назад.
+В проекте была реализована навигация с использованием Navigation Component и Bottom Navigation. Создан граф навигации nav_graph.xml с тремя основными пунктами меню - главная страница, история настроений и профиль пользователя. Ручные кнопки были удалены.
 
 **Приложение:**
-<img width="1891" height="1099" alt="image" src="https://github.com/user-attachments/assets/bbc4552c-c440-4e72-8f9c-4cfd009bba05" />
+<img width="1881" height="1113" alt="image" src="https://github.com/user-attachments/assets/7c1461c4-3704-4fd5-8169-1ea5bd8fab3a" />
 
-В данный момент приложение полностью функционально и имеет такие экраны:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
 
-Авторизация
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.HomeFragment"
+        android:label="Главная"
+        tools:layout="@layout/fragment_home" />
 
-<img width="444" height="931" alt="image" src="https://github.com/user-attachments/assets/9b866550-7111-48d9-a096-eeeb27311de3" />
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.HistoryFragment"
+        android:label="История"
+        tools:layout="@layout/activity_history">
 
-Гостевой вход
+        <action
+            android:id="@+id/action_history_to_mood_detail"
+            app:destination="@id/moodDetailFragment" />
 
-<img width="447" height="941" alt="image" src="https://github.com/user-attachments/assets/48be69e7-2385-4c18-bdaa-880be29a7e1d" />
+    </fragment>
 
-Личный кабинет с погодой
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.ProfileFragment"
+        android:label="Профиль"
+        tools:layout="@layout/fragment_profile" />
 
-<img width="443" height="935" alt="image" src="https://github.com/user-attachments/assets/cede7de3-6387-4259-88e3-b8977f1e1689" />
+    <fragment
+        android:id="@+id/moodDetailFragment"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.MoodDetailFragment"
+        android:label="Детали настроения"
+        tools:layout="@layout/fragment_mood_detail">
 
-Профиль
+        <action
+            android:id="@+id/action_mood_detail_to_history"
+            app:destination="@id/navigation_history"
+            app:popUpTo="@id/navigation_history"
+            app:popUpToInclusive="false" />
 
-<img width="436" height="930" alt="image" src="https://github.com/user-attachments/assets/5381eee3-4b62-490b-bf41-87ba20842f67" />
+    </fragment>
 
-История настроений с возможностью добавления и редактирования записей
+</navigation>
+```
 
-<img width="452" height="939" alt="image" src="https://github.com/user-attachments/assets/c730ccaa-cc09-4c4d-8171-2bc9bdcb839e" />
+Также было настроено ограничение доступа к истории настроений для гостевых пользователей, пункт "История" скрывается в меню если вы гость.
 
-Детали выбранной записи настроения
+**Приложение:**
+<img width="1870" height="1124" alt="image" src="https://github.com/user-attachments/assets/5221c858-81aa-4315-9085-80ad49eee78c" />
 
-<img width="446" height="936" alt="image" src="https://github.com/user-attachments/assets/71fd2990-1696-4daa-b2f1-56c2a2c79cb1" />
+
+
+
 
 
 
