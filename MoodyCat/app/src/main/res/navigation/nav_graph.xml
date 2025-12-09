@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.HomeFragment"
+        android:label="Главная"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.HistoryFragment"
+        android:label="История"
+        tools:layout="@layout/activity_history">
+
+        <action
+            android:id="@+id/action_history_to_mood_detail"
+            app:destination="@id/moodDetailFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.ProfileFragment"
+        android:label="Профиль"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/moodDetailFragment"
+        android:name="ru.mirea.vinokurovazo.moodycat.presentation.MoodDetailFragment"
+        android:label="Детали настроения"
+        tools:layout="@layout/fragment_mood_detail">
+
+        <action
+            android:id="@+id/action_mood_detail_to_history"
+            app:destination="@id/navigation_history"
+            app:popUpTo="@id/navigation_history"
+            app:popUpToInclusive="false" />
+
+    </fragment>
+
+</navigation>

@@ -51,42 +51,19 @@ public class HomeFragment extends Fragment {
 
         ImageView catImageView = view.findViewById(R.id.iv_cat_image);
         TextView catNameText = view.findViewById(R.id.tv_cat_name);
-        Button historyButton = view.findViewById(R.id.btn_history);
         Button weatherButton = view.findViewById(R.id.btn_weather);
         Button logoutButton = view.findViewById(R.id.btn_logout);
-        Button profileButton = view.findViewById(R.id.btn_profile);
 
         boolean isGuest = authRepository.isGuest();
 
         if (isGuest) {
             catImageView.setImageResource(R.drawable.ic_launcher_foreground);
-            historyButton.setVisibility(View.GONE);
-            profileButton.setVisibility(View.GONE);
         } else {
             catImageView.setImageResource(R.drawable.cat_default);
-            historyButton.setVisibility(View.VISIBLE);
-            profileButton.setVisibility(View.VISIBLE);
         }
 
-        historyButton.setOnClickListener(v -> {
-            if (!isGuest) {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new HistoryFragment())
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
 
         weatherButton.setOnClickListener(v -> updateWeather(view));
-
-        profileButton.setOnClickListener(v -> {
-            if (!isGuest) {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new ProfileFragment())
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
 
         logoutButton.setOnClickListener(v -> logout());
     }

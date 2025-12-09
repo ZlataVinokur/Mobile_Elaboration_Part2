@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/baseline_castle_24"
+        android:title="Главная" />
+
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/baseline_edit_square_24"
+        android:title="История" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/baseline_child_care_24"
+        android:title="Профиль" />
+</menu>

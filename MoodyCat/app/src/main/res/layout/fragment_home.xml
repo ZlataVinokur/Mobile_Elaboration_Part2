@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Заголовок -->
         <Space
             android:layout_width="match_parent"
             android:layout_height="67dp" />
@@ -28,50 +27,18 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <!-- Кнопки действий -->
         <ImageView
             android:id="@+id/iv_cat_image"
-            android:layout_width="match_parent"
+            android:layout_width="235dp"
             android:layout_height="200dp"
+            android:layout_marginHorizontal="76dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:background="#EDDFD0"
+            android:background="#F0E8DE"
             android:contentDescription="Изображение кота"
             android:fadingEdge="vertical"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/cat_default" />
-
-        <!-- Кнопка профиля -->
-        <Button
-            android:id="@+id/btn_profile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#EDAA63"
-            android:text="Профиль"
-            android:textColor="#FFF"
-            android:textStyle="bold" />
-
-        <!-- Погода -->
-        <Button
-            android:id="@+id/btn_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#F2E9DF"
-            android:text="Посмотреть историю настроений"
-            android:textColor="#EDAA63"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btn_weather"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#EBA963"
-            android:text="Обновить погоду"
-            android:textColor="#FFF"
-            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,6 +69,20 @@
                 android:layout_height="wrap_content"
                 android:text="Температура: ..."
                 android:textSize="14sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="33dp" />
+
+            <Button
+                android:id="@+id/btn_weather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#EBA963"
+                android:text="Обновить погоду"
+                android:textColor="#FFF"
+                android:textStyle="bold" />
 
 
         </LinearLayout>

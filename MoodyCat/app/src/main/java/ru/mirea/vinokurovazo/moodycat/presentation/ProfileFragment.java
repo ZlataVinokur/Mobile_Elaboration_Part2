@@ -36,7 +36,6 @@ public class ProfileFragment extends Fragment {
     private void setupUI(View view, AuthRepositoryImpl authRepository, SharedPrefsStorage sharedPrefsStorage) {
         TextView tvEmail = view.findViewById(R.id.tv_email);
         TextView tvUserType = view.findViewById(R.id.tv_user_type);
-        Button btnBack = view.findViewById(R.id.btn_back);
 
         String userId = sharedPrefsStorage.getUserId();
         String userEmail = sharedPrefsStorage.getUserEmail();
@@ -45,6 +44,5 @@ public class ProfileFragment extends Fragment {
         tvEmail.setText("Email: " + userEmail);
         tvUserType.setText("Тип пользователя: " + (isGuest ? "Гость" : "Зарегистрированный"));
 
-        btnBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
     }
 }

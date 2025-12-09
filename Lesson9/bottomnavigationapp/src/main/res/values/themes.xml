@@ -1,0 +1,24 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Lesson9" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#9E77D5</item>
+        <item name="colorPrimaryVariant">#241264</item>
+        <item name="colorOnPrimary">#A6A6A6</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#FFD967</item>
+        <item name="colorSecondaryVariant">#B18A00</item>
+        <item name="colorOnSecondary">#121212</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">#202243</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.BottomNavigationApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">#904632</item>
+        <item name="colorPrimaryVariant">#B6362D</item>
+        <item name="colorOnSecondary">#121212</item>
+        <item name="android:statusBarColor">#202243</item>
+        <item name="android:windowBackground">#D0D9CA</item>
+    </style>
+</resources>

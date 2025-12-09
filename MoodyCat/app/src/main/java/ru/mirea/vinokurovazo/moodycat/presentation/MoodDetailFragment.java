@@ -19,6 +19,9 @@ import ru.mirea.vinokurovazo.moodycat.R;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 public class MoodDetailFragment extends Fragment {
     private static final String ARG_MOOD = "mood";
     private Mood mood;
@@ -52,7 +55,8 @@ public class MoodDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (mood == null) {
-            requireActivity().getSupportFragmentManager().popBackStack();
+            NavController navController = Navigation.findNavController(view);
+            navController.popBackStack();
             return;
         }
 
@@ -87,7 +91,10 @@ public class MoodDetailFragment extends Fragment {
 
         adviceText.setText(getAdviceForMood(mood.getMood()));
 
-        btnBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        btnBack.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.popBackStack();
+        });
     }
 
     private String getAdviceForMood(String mood) {

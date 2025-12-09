@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,9 +40,9 @@ public class HistoryFragment extends Fragment implements MoodAdapter.OnMoodClick
         setupViewModel();
         setupRecyclerView(view);
         setupFabButton(view);
-        setupBackButton(view);
         setupObservers();
 
+        //historyViewModel.getMoods();
     }
 
     private void setupViewModel() {
@@ -58,11 +60,10 @@ public class HistoryFragment extends Fragment implements MoodAdapter.OnMoodClick
 
     @Override
     public void onMoodClick(Mood mood, int position) {
-        MoodDetailFragment detailFragment = MoodDetailFragment.newInstance(mood);
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, detailFragment)
-                .addToBackStack("mood_detail")
-                .commit();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("mood", mood);
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.action_history_to_mood_detail, bundle);
     }
 
     @Override
@@ -76,10 +77,6 @@ public class HistoryFragment extends Fragment implements MoodAdapter.OnMoodClick
         fabAddMood.setOnClickListener(v -> showAddMoodDialog());
     }
 
-    private void setupBackButton(View view) {
-        Button btnBack = view.findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
-    }
 
     private void setupObservers() {
         historyViewModel.getMoods().observe(getViewLifecycleOwner(), moods -> {

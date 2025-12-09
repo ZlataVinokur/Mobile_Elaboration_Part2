@@ -25,23 +25,43 @@ import android.widget.ProgressBar;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import ru.mirea.vinokurovazo.moodycat.presentation.viewmodel.MainViewModel;
-import ru.mirea.vinokurovazo.moodycat.presentation.viewmodel.MainViewState;
-import ru.mirea.vinokurovazo.moodycat.presentation.viewmodel.MainViewModelFactory;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         AuthRepositoryImpl authRepository = new AuthRepositoryImpl(this);
-
         if (!authRepository.isLoggedIn()) {
             startActivity(new Intent(this, AuthActivity.class));
             finish();
+            return;
         }
+
+        setContentView(R.layout.activity_main);
+
+        BottomNavigationView navView = findViewById(R.id.bottom_nav);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        if (authRepository.isGuest()) {
+            navView.getMenu().findItem(R.id.navigation_history).setVisible(false);
+        }
+
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home,
+                R.id.navigation_history,
+                R.id.navigation_profile
+        ).build();
+
+        NavigationUI.setupWithNavController(navView, navController);
     }
 }
 //skunkfuck@eee.com,12345aaa
